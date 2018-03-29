@@ -1,4 +1,4 @@
-console.log("Script Loaded")
+const container = document.querySelector('.container')
 
 const personFactory = (name, marker, playerNumber) => {
   const sayHello  = () => {
@@ -14,5 +14,16 @@ const personFactory = (name, marker, playerNumber) => {
   return { name, marker, sayHello, displayPerson }
 }
 
-let hugo = personFactory("Hugo", "H", 1)
-let mark = personFactory("Mark", "M", 2)
+const writeBox = (box, marker) => {
+  box.innerText = marker;
+}
+
+container.addEventListener('click', (event) => {
+  const target = event.target;
+  if (target.className === "box") {
+    writeBox(target, "x")
+  }
+});
+
+let hugo = personFactory("Hugo", "X", 1)
+let mark = personFactory("Mark", "O", 2)

@@ -1,7 +1,7 @@
 .wrapper{}
 
 .container {
-  width: 158px;
+  width: 160px;
   height: 158px;
   border: 1px solid black;
   background-color: black;
@@ -12,4 +12,5 @@
   height: 50px;
   width: 50px;
   background-color: white;
+  margin-bottom: 3px;
 }
