@@ -22,8 +22,28 @@ const gameFactory = (player1, player2) => {
   let currentPlayer = player1;
   let gameArray = ["", "", "", "", "", "", "", "", ""];
 
-  const writeBox = (box, marker) => {
-    box.innerText = marker;
+  const validChoice = (target) => {
+    const targetIndex = target.id.slice(-1);
+    if (gameArray[targetIndex] === "") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  const playerChoose = (currentPlayer, target) => {
+    const targetIndex = target.id.slice(-1);
+    const playerMarker = currentPlayer.marker;
+    if (gameArray[targetIndex] === "") {
+      gameArray[targetIndex] = playerMarker;
+    }
+  }
+
+  const renderBoard = () => {
+    const boxes = document.querySelectorAll('.box')
+    boxes.forEach(function(box, index) {
+      box.innerText = gameArray[index];
+    })
   };
 
   const switchPlayer = (currentPlayer) => {
@@ -37,8 +57,13 @@ const gameFactory = (player1, player2) => {
   container.addEventListener('click', (event) => {
     const target = event.target;
     if (target.className === "box") {
-      writeBox(target, currentPlayer.marker);
-      currentPlayer = switchPlayer(currentPlayer);
+      let valid = validChoice(target)
+      if (valid) {
+        playerChoose(currentPlayer, target);
+        renderBoard();
+        // TODO: Check if game has been won
+        currentPlayer = switchPlayer(currentPlayer);
+      }
     };
   });
 };
