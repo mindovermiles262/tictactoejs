@@ -26,24 +26,16 @@ const gameFactory = (player1, player2) => {
   //   [1, 1, 1].allSameValues => true
   //   [1, 1, 2].allSameValues => false
   Array.prototype.allSameValues = function() {
-    if (this[0] === "") {
-      return false;
-    }
+    if (this[0] === "") { return false; }
     for (let i = 1; i < this.length; i++) {
-      if (this[i] !== this[0]) {
-        return false;
-      }
+      if (this[i] !== this[0]) { return false; }
     } 
     return true;
   }
 
   const validChoice = (target) => {
     const targetIndex = target.id.slice(-1);
-    if (gameArray[targetIndex] === "") {
-      return true;
-    } else {
-      return false;
-    }
+    return (gameArray[targetIndex] === "") ? true : false;
   }
 
   const playerChoose = (currentPlayer, target) => {
@@ -62,12 +54,16 @@ const gameFactory = (player1, player2) => {
   };
 
   const switchPlayer = (currentPlayer) => {
-    if (currentPlayer === player1) {
-      return player2;
-    } else {
-      return player1;
-    };
+    return (currentPlayer === player1) ? player2 : player1;
   };
+
+  const checkForTie = (gameArray) => {
+    let tieGame = true;
+    gameArray.forEach(function(position) {
+      if (position === "") { tieGame = false; }
+    })
+    return tieGame;
+  }
 
   const checkForWin = (gameArray) => {
     let win = false;
@@ -97,11 +93,19 @@ const gameFactory = (player1, player2) => {
   }
 
   const gameOver = player => {
+    const messageAnchor = document.querySelector(".message")
+    const changeScreen = (displayMessage) => {
+      container.style.display = 'none';
+      messageAnchor.innerHTML = `<h1>${displayMessage}</h1>`
+    }
+
     const tieGame = () => {
+      changeScreen("Tie Game");
       console.log("TIE GAME")
     }
 
     const winner = () => {
+      changeScreen(`You Win ${player.name}!`);
       console.log(`You Win ${player.name}!`)
     }
 
@@ -116,9 +120,11 @@ const gameFactory = (player1, player2) => {
       if (valid) {
         playerChoose(currentPlayer, target);
         renderBoard();
-        // Check for tie game
+        const tie = checkForTie(gameArray);
         const win = checkForWin(gameArray, currentPlayer);
-        if (win) {
+        if (tie) {
+          gameOver();
+        } else if (win) {
           gameOver(currentPlayer);
         } else {
           currentPlayer = switchPlayer(currentPlayer);
