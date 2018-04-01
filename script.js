@@ -2,29 +2,26 @@ const container = document.querySelector('.container');
 
 // -----  PERSON FACTORY  -----
 const personFactory = (name, marker, playerNumber) => {
-  const sayHello  = () => {
-    console.log(`Hello my name is ${name}`);
-  };
-
   const displayPerson = () => {
     document.querySelector(`#player${playerNumber}`).innerText = `${name}, ${marker}`
   };
 
   displayPerson();
   
-  return { name, marker, sayHello, displayPerson };
+  return { name, marker, displayPerson };
 };
 
 
 
 // -----  GAME FACTORY  -----
 const gameFactory = (player1, player2) => {
+  document.querySelector('.gameInformation').classList.remove('hidden');
+  document.querySelector('.getPlayerInfo').classList.add('hidden')
+
   let currentPlayer = player1;
-  let gameArray = ["", "", "", "", "", "", "", "", ""];
+  let gameArray = Array(9).fill('');
 
   // Checks if all items in array are the same
-  //   [1, 1, 1].allSameValues => true
-  //   [1, 1, 2].allSameValues => false
   Array.prototype.allSameValues = function() {
     if (this[0] === "") { return false; }
     for (let i = 1; i < this.length; i++) {
@@ -93,24 +90,21 @@ const gameFactory = (player1, player2) => {
   }
 
   const gameOver = player => {
+    // If not passed ARG, tie game is displayed
     const messageAnchor = document.querySelector(".message")
+    const gameInformation = document.querySelector('.gameInformation')
+
     const changeScreen = (displayMessage) => {
       container.style.display = 'none';
+      gameInformation.style.display = 'none';
       messageAnchor.innerHTML = `<h1>${displayMessage}</h1>`
     }
 
-    const tieGame = () => {
-      changeScreen("Tie Game");
-      console.log("TIE GAME")
-    }
+    const tieGame = () => { changeScreen("Tie Game"); }
 
-    const winner = () => {
-      changeScreen(`You Win ${player.name}!`);
-      console.log(`You Win ${player.name}!`)
-    }
-
-    player === undefined ? tieGame() : winner()
+    const winner = () => { changeScreen(`You Win ${player.name}!`); }
     
+    player === undefined ? tieGame() : winner()
   }
 
   container.addEventListener('click', (event) => {
@@ -137,7 +131,10 @@ const gameFactory = (player1, player2) => {
 
 
 // ----- INIT GAME -----
-let hugo = personFactory("Hugo", "X", 1);
-let mark = personFactory("Mark", "O", 2);
-
-gameFactory(hugo, mark);
+document.querySelector('#startGame').addEventListener('click', function() {
+  const player1Name = document.querySelector('#player1Name').value
+  const player2Name = document.querySelector('#player2Name').value
+  let player1 = personFactory(player1Name, "X", 1);
+  let player2 = personFactory(player2Name, "O", 2);
+  gameFactory(player1, player2);
+})
