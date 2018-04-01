@@ -1,10 +1,4 @@
 .hidden {
-  /* visibility: hidden; */
-  display: none;
-}
-
-.hidden div {
-  /* visibility: hidden; */
   display: none;
 }
 
